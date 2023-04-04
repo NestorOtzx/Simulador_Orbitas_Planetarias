@@ -1,19 +1,19 @@
-from Dibujos.Dibujo import Dibujo
 import pygame
-from InfoManager import InfoManager
+from Dibujos.Dibujo import Dibujo
+from Pantalla import Pantalla
+from Utilidades.Posicion import Posicion
 
 class Circulo(Dibujo):
 
     radio = 0
-    posicion = 0
 
-    def __init__(self, posicion, radio):
-        super().__init__()
+    def __init__(self, nombre : str, posicion : Posicion, radio : int, color = (0, 0, 0)):
+        super().__init__(nombre, color)
         self.posicion = posicion
         self.radio = radio
 
     def dibujar(self):
-        pygame.draw.circle(InfoManager().ventana, self.color, self.posicion, self.radio)
+        pygame.draw.circle(Pantalla().ventana, self.color, self.posicion, self.radio)
 
     def tick(self, deltaTime):
         self.dibujar()

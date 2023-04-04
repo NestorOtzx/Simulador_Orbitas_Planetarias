@@ -1,68 +1,66 @@
 import pygame
-from InfoManager import InfoManager
+from Pantalla import Pantalla
 
-from Dibujos.Circulo import Circulo
-from Dibujos.Linea import Linea
 from Objeto import Objeto
+from Interfaz.Plano import Plano
 
 from typing import Tuple
 class Simulacion:
 
+    #objeto global
+    objeto = None    
+
+    fondo = None
 
     def __init__(self):
         self.valor = 0
-
+    
     #metodo llamado solamente al inicio de la simulacion
     def inicio(self):
-        print("--Inicio de la simulacion--")
+        self.objeto = Objeto("Main")
+        self.fondo = Plano("Plano cartesiano")
 
-        #dibujar linea
-        linea = Linea((0,0), (300, 0), 5)
-        #dibujar circulo
-        circulo = Circulo((100, 100), 40)
- 
 
     #metodo llamado en cada fotograma, donde deltatime es el tiempo transcurrido desde el fotograma anterior
     def tick(self, deltaTime):
         #Actualizar todos los objetos
-        #Logica del simulador
-        
-        Objeto.tick_global(deltaTime)
+        self.objeto.tick_global(deltaTime)
 
     def iniciarSimulacion(self):
 
         #--Inicializacion basica--
-        #frames a los que se espera que el programa se ejecute
-        #clock = pygame.time.Clock()
-        
         pygame.init()
 
-        #resolucion
-        ventana =  pygame.display.set_mode(InfoManager.resolucion)
-        InfoManager().ventana =ventana
+        #Crear la ventana de pantalla completa con el centro en (0, 0)
+        ventana = pygame.display.set_mode(Pantalla.resolucion)
+        
+        Pantalla().ventana =ventana
+
 
         #nombre de la ventana
         pygame.display.set_caption("Simulador de fisica")
 
         self.inicio()
 
+        #Clock para calcular deltaTime
+        clock = pygame.time.Clock()
+
         #bucle principal
         while (True):
 
-            #tiempo transcurrido en segundos desde el frame anterior
-            delta_time = 0
+            #tiempo transcurrido en segundos desde el frame anterior en segundos
+            deltaTime = clock.tick(60) / 1000.0 
+
+            self.tick(deltaTime)
 
             
-            
-            self.tick(delta_time)
 
-            pygame.display.update()
-            
             for evento in pygame.event.get():
                 if (evento.type == pygame.QUIT):
                     pygame.quit()
+            pygame.display.update()
 
-            InfoManager().ventana.fill((255, 255, 255))
+            Pantalla().ventana.fill((255, 255, 255))
 
         pygame.quit()
 
