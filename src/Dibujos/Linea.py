@@ -1,7 +1,6 @@
 import pygame
 from Dibujos.Dibujo import Dibujo
 from Pantalla import Pantalla
-from Utilidades.Posicion import Posicion
 
 class Linea(Dibujo):
 
@@ -10,7 +9,7 @@ class Linea(Dibujo):
     ancho = 0
 
 
-    def __init__(self, nombre : str, cola : Posicion, cabeza : Posicion, ancho : int, color = (0, 0, 0)):
+    def __init__(self, nombre : str, cola, cabeza, ancho : int, color = (0, 0, 0)):
         super().__init__(nombre, color)
 
         self.cola = cola

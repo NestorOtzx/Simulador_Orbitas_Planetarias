@@ -4,6 +4,6 @@ from Singleton import Singleton
 class Pantalla(metaclass = Singleton):
 
     ventana = None
-    resolucion = (960, 540)
+    resolucion = (960, 960)
     FPS = 60
 
