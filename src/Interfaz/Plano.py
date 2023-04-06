@@ -12,7 +12,7 @@ class Plano(Dibujo):
     ejeY = None
 
     #cada cuanto apareceran los puntos, por defecto 1 por cada unidad
-    puntosPorUnidad = 16
+    puntosPorUnidad = 8
 
     colorCuadricula = (200, 200, 200)
 
@@ -44,7 +44,6 @@ class Plano(Dibujo):
         self.ejeY = Linea("Y", (res[0]/2, 0), (res[0]/2, res[1]), 5, (0, 0, 0))
 
 
-        self.graficarFuncion(self.funcionA, (255, 0, 0), True, False, 3)
         self.graficarFuncion(self.funcionB, (255, 0, 0), True, False, 3)
 
         xLetra = Texto("Txt1", (res[0]-20, res[1]/2+res[1]/64), "X", (255, 0, 0))
@@ -63,8 +62,8 @@ class Plano(Dibujo):
         for x in range(int(res[0]/2), int(res[0]), int(self.distanciaCuadriculas[0]/self.puntosPorUnidad)):
             coords = self.pixelesACoordenadas(x, 0)
             try:
-                print(str(coords[0])+" | "+str(funcion(coords[0])))
-                pos = self.coordenadasAPixeles(coords[0], funcion(coords[0]))
+                puntoGrafica =funcion(coords[0], coords[0])
+                pos = self.coordenadasAPixeles(puntoGrafica[0], puntoGrafica[1])
 
                 if (dibujarLineas):
                     if not puntoAnterior is None:
@@ -80,7 +79,8 @@ class Plano(Dibujo):
         for x in range(int(res[0]/2), 0, -int(self.distanciaCuadriculas[0]/self.puntosPorUnidad)):
             coords = self.pixelesACoordenadas(x, 0)
             try:
-                pos = self.coordenadasAPixeles(coords[0], funcion(coords[0]))
+                puntoGrafica =funcion(coords[0], coords[0])
+                pos = self.coordenadasAPixeles(puntoGrafica[0], puntoGrafica[1])
 
                 if (dibujarLineas):
                     if not puntoAnterior is None:
@@ -103,14 +103,15 @@ class Plano(Dibujo):
         res = Pantalla().resolucion
         xPix = (xCoord*self.distanciaCuadriculas[0] + res[0]/2)
         yPix = (-yCoord*self.distanciaCuadriculas[1] + res[1]/2)
-        #print("Coord: ("+str(xCoord)+" , "+str(yCoord)+")" + " Pixeles: ("+str(xPix)+" , "+str(yPix)+")" )
         return (xPix, yPix)
 
-    def funcionA(self, x):
-        return math.pow(x, math.sin(x))
+    def funcionA(self, x, y):
+        y = x**2
+        return (x, y)
     
-    def funcionB(self, x):
-        return -math.pow(x, math.sin(x))
+    def funcionB(self, x,y):
+        x = y**2
+        return (x, y)
 
 
     def xFunc(self, x):
