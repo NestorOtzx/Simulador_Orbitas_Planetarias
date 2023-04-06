@@ -1,5 +1,5 @@
 import pygame
-from Dibujos.Dibujo import Dibujo
+from Graficos.Dibujo import Dibujo
 from Pantalla import Pantalla
 
 class Linea(Dibujo):
@@ -17,8 +17,8 @@ class Linea(Dibujo):
         self.ancho = ancho
 
     def dibujar(self):
-        pygame.draw.line(Pantalla().ventana, self.color, (self.cola[0]+ self.posicionX, self.cola[1]+self.posicionY)
-                         , (self.cabeza[0]+ self.posicionX, self.cabeza[1]+self.posicionY), self.ancho)
+        pygame.draw.line(Pantalla().ventana, self.color, (self.cola[0]+ self.posicion[0], self.cola[1]+self.posicion[1])
+                         , (self.cabeza[0]+ self.posicion[0], self.cabeza[1]+self.posicion[1]), self.ancho)
 
     def tick(self, deltaTime):
         self.dibujar()

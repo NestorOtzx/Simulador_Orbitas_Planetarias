@@ -6,8 +6,9 @@ class Objeto():
 
     nombre = ""
 
-    posicionX = 0
-    posicionY = 0
+    #Posicion en pixeles
+    posicion = (0,0)
+    
 
     def __init__(self, nombre):
         self.__instancias.append(self)

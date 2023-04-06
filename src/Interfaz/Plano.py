@@ -1,7 +1,9 @@
-from Dibujos.Dibujo import Dibujo
-from Dibujos.Linea import Linea
+from Graficos.Dibujo import Dibujo
+from Graficos.Linea import Linea
 from Pantalla import Pantalla
-from Dibujos.Circulo import Circulo
+from Graficos.Circulo import Circulo
+from Graficos.Texto import Texto
+
 import math
 
 class Plano(Dibujo):
@@ -10,7 +12,7 @@ class Plano(Dibujo):
     ejeY = None
 
     #cada cuanto apareceran los puntos, por defecto 1 por cada unidad
-    puntosPorUnidad = 4
+    puntosPorUnidad = 16
 
     colorCuadricula = (200, 200, 200)
 
@@ -20,7 +22,7 @@ class Plano(Dibujo):
         super().__init__(nombre)
         self.dibujar()
 
-    def dibujar(self):
+    def dibujar(self): #Este metodo solo se llama al inicio
         res = Pantalla().resolucion
 
         #Cuadricula (tienen que dibujarse por mitades para evitar que se desfacen al no coincidir con el centro debido a su distancia de separación)
@@ -42,38 +44,50 @@ class Plano(Dibujo):
         self.ejeY = Linea("Y", (res[0]/2, 0), (res[0]/2, res[1]), 5, (0, 0, 0))
 
 
-        self.graficarFuncion(self.xalcuadrado)
+        self.graficarFuncion(self.funcionA, (255, 0, 0), True, False, 3)
+        self.graficarFuncion(self.funcionB, (255, 0, 0), True, False, 3)
 
-        self.graficarFuncion(math.sin, (0, 255, 0))
+        xLetra = Texto("Txt1", (res[0]-20, res[1]/2+res[1]/64), "X", (255, 0, 0))
+        yLetra = Texto("Txt2", (res[0]/2+10, 0), "Y", (0, 0, 0))
 
-        self.graficarFuncion(self.xFunc, (255, 0, 0))
+        # crea un objeto de fuente
+    
+    
 
-        self.graficarFuncion(math.log, (10, 10, 10))
-
-        self.graficarFuncion(math.tan, (40, 200, 100))
-
- 
-
-    def graficarFuncion(self, funcion, color = (0, 0, 255)):
+    def graficarFuncion(self, funcion, color = (0, 0, 255), dibujarLineas = False, dibujarPuntos = True, grosorDeLineas = 4):
         res = Pantalla().resolucion
 
         #Tambien deben dibujarse por mitades para evitar que se desfacen del centro
         #lado derecho
+        puntoAnterior = None
         for x in range(int(res[0]/2), int(res[0]), int(self.distanciaCuadriculas[0]/self.puntosPorUnidad)):
             coords = self.pixelesACoordenadas(x, 0)
             try:
                 print(str(coords[0])+" | "+str(funcion(coords[0])))
                 pos = self.coordenadasAPixeles(coords[0], funcion(coords[0]))
-                Circulo("Punto"+str(x), pos, 5, color)
+
+                if (dibujarLineas):
+                    if not puntoAnterior is None:
+                        Linea("LPunto", puntoAnterior, pos, grosorDeLineas, color)
+                    puntoAnterior = pos
+                if (dibujarPuntos):
+                    Circulo("Punto"+str(x), pos, 5, color)
             except:
                 pass
 
+        puntoAnterior = None
         #lado izquierdo
         for x in range(int(res[0]/2), 0, -int(self.distanciaCuadriculas[0]/self.puntosPorUnidad)):
             coords = self.pixelesACoordenadas(x, 0)
             try:
                 pos = self.coordenadasAPixeles(coords[0], funcion(coords[0]))
-                Circulo("Punto"+str(x), pos, 5, color)
+
+                if (dibujarLineas):
+                    if not puntoAnterior is None:
+                        Linea("Punto", puntoAnterior, pos, grosorDeLineas, color)
+                    puntoAnterior = pos
+                if (dibujarPuntos):
+                    Circulo("Punto"+str(x), pos, 5, color)
             except:
                 pass
 
@@ -92,9 +106,13 @@ class Plano(Dibujo):
         #print("Coord: ("+str(xCoord)+" , "+str(yCoord)+")" + " Pixeles: ("+str(xPix)+" , "+str(yPix)+")" )
         return (xPix, yPix)
 
-    def xalcuadrado(self, x):
-        return x**2
+    def funcionA(self, x):
+        return math.pow(x, math.sin(x))
     
+    def funcionB(self, x):
+        return -math.pow(x, math.sin(x))
+
+
     def xFunc(self, x):
         return x
 

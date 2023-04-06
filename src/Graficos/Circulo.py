@@ -1,5 +1,5 @@
 import pygame
-from Dibujos.Dibujo import Dibujo
+from Graficos.Dibujo import Dibujo
 from Pantalla import Pantalla
 class Circulo(Dibujo):
 
