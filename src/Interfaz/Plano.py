@@ -3,8 +3,11 @@ from Graficos.Linea import Linea
 from Pantalla import Pantalla
 from Graficos.Circulo import Circulo
 from Graficos.Texto import Texto
-
 import math
+
+import numpy as np
+
+
 
 class Plano(Dibujo):
 
@@ -44,14 +47,44 @@ class Plano(Dibujo):
         self.ejeY = Linea("Y", (res[0]/2, 0), (res[0]/2, res[1]), 5, (0, 0, 0))
 
 
-        self.graficarFuncion(self.funcionB, (255, 0, 0), True, False, 3)
+        self.graficarEcuacion(self.ecuacion)
+
+        #self.graficarFuncion(self.funcionA, (255, 0, 0), True, False, 3)
 
         xLetra = Texto("Txt1", (res[0]-20, res[1]/2+res[1]/64), "X", (255, 0, 0))
         yLetra = Texto("Txt2", (res[0]/2+10, 0), "Y", (0, 0, 0))
 
-        # crea un objeto de fuente
-    
-    
+    def f(self, x, y):
+        return x - 5*x/np.sqrt(x**2 + y**2)
+
+    def graficarEcuacion(self, ecuacion, color = (0, 0, 255), dibujarLineas = False, dibujarPuntos = True, grosorDeLineas = 4):
+        # Generar un rango de valores para x y y
+        x = np.linspace(-25, 25, 1000)
+        y = np.linspace(-25, 25, 1000)
+
+        # Generar la malla de puntos correspondientes a la cuadrícula
+        X, Y = np.meshgrid(x, y)
+
+        # Evaluar la función en los puntos de la malla
+        Z = self.f(X, Y)
+
+        # recorrer la matriz Z
+        sol_indices = np.where(np.abs(Z) < 0.01)
+
+        # Obtener los valores de X e Y correspondientes a las soluciones
+        sol_x = X[sol_indices]
+        sol_y = Y[sol_indices]
+
+        # Imprimir las soluciones
+        for x, y in zip(sol_x, sol_y):
+            print(f"La solución es x={x:.2f}, y={y:.2f}")
+            Circulo("C", self.coordenadasAPixeles(x, y), 2, (0,0,0))
+        
+
+    def ecuacion(self, x):
+       
+        return x
+
 
     def graficarFuncion(self, funcion, color = (0, 0, 255), dibujarLineas = False, dibujarPuntos = True, grosorDeLineas = 4):
         res = Pantalla().resolucion
@@ -96,7 +129,7 @@ class Plano(Dibujo):
         xCoord = (xPix - res[0]/2)/self.distanciaCuadriculas[0]
         yCoord = -(yPix - res[1]/2)/self.distanciaCuadriculas[1]
 
-        print("Pixeles: ("+str(xPix)+" , "+str(yPix)+")" +" Coord: ("+str(xCoord)+" , "+str(yCoord)+")")
+        #print("Pixeles: ("+str(xPix)+" , "+str(yPix)+")" +" Coord: ("+str(xCoord)+" , "+str(yCoord)+")")
         return (xCoord, yCoord)
     
     def coordenadasAPixeles(self, xCoord : float, yCoord: float):
@@ -104,18 +137,6 @@ class Plano(Dibujo):
         xPix = (xCoord*self.distanciaCuadriculas[0] + res[0]/2)
         yPix = (-yCoord*self.distanciaCuadriculas[1] + res[1]/2)
         return (xPix, yPix)
-
-    def funcionA(self, x, y):
-        y = x**2
-        return (x, y)
-    
-    def funcionB(self, x,y):
-        x = y**2
-        return (x, y)
-
-
-    def xFunc(self, x):
-        return x
 
     def tick(self, deltaTime):
         pass
