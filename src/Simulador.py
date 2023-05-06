@@ -10,7 +10,7 @@ class Simulacion:
     #objeto global
     objeto = None    
 
-    fondo = None
+    plano = None
 
     def __init__(self):
         self.valor = 0
@@ -18,7 +18,7 @@ class Simulacion:
     #metodo llamado solamente al inicio de la simulacion
     def inicio(self):
         self.objeto = Objeto("Main")
-        self.fondo = Plano("Plano cartesiano")
+        self.plano = Plano("Plano cartesiano")
 
 
     #metodo llamado en cada fotograma, donde deltatime es el tiempo transcurrido desde el fotograma anterior
@@ -51,14 +51,27 @@ class Simulacion:
             #tiempo transcurrido en segundos desde el frame anterior en segundos
             deltaTime = clock.tick(60) / 1000.0 
 
-            self.tick(deltaTime)
-
+            # Read
             
+
+            # Update
+            self.tick(deltaTime)
 
             for evento in pygame.event.get():
                 if (evento.type == pygame.QUIT):
                     pygame.quit()
+
+                 # Si el evento es un evento de rueda del ratón
+                if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 4:
+                    self.plano.zoom(10)
+                elif evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 5:
+                    self.plano.zoom(-10)
+                
+            
+           
             pygame.display.update()
+
+
 
             Pantalla().ventana.fill((255, 255, 255))
 

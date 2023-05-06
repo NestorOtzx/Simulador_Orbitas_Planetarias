@@ -12,7 +12,8 @@ class Circulo(Dibujo):
         
 
     def dibujar(self):
-        pygame.draw.circle(Pantalla().ventana, self.color, self.posicion, self.radio)
+        if (self.posicion[0] > 0 and self.posicion[1]>0):
+            pygame.draw.circle(Pantalla().ventana, self.color, self.posicion, self.radio)
 
     def tick(self, deltaTime):
         self.dibujar()

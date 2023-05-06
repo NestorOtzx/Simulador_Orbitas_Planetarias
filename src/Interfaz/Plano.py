@@ -4,59 +4,103 @@ from Pantalla import Pantalla
 from Graficos.Circulo import Circulo
 from Graficos.Texto import Texto
 import math
-
 import numpy as np
-
-
+import pygame
+import time
 
 class Plano(Dibujo):
 
-    ejeX = None
-    ejeY = None
 
     #cada cuanto apareceran los puntos, por defecto 1 por cada unidad
     puntosPorUnidad = 8
 
     colorCuadricula = (200, 200, 200)
 
-    distanciaCuadriculas = (20, 20)
+    distanciaCuadriculas = (100, 100)
+
+    MAXDISTCUADRICULAS = (400, 400)
+
+
+    lineas = []
 
     def __init__(self, nombre):
         super().__init__(nombre)
-        self.dibujar()
+
+        
+    def zoom(self, val):
+        self.setDistanciaCuadriculas(val, val)
+
+
+    def setDistanciaCuadriculas(self, x,y):
+        currDist =self.distanciaCuadriculas
+        if (currDist[0]+x) < self.MAXDISTCUADRICULAS[0] and currDist[0]+x > 0 and currDist[1]+y < self.MAXDISTCUADRICULAS[1] and currDist[1]+y > 0:
+            self.distanciaCuadriculas = (self.distanciaCuadriculas[0]+x, self.distanciaCuadriculas[1]+y)
+
+        
 
     def dibujar(self): #Este metodo solo se llama al inicio
         res = Pantalla().resolucion
 
-        #Cuadricula (tienen que dibujarse por mitades para evitar que se desfacen al no coincidir con el centro debido a su distancia de separación)
-        #lado derecho
+        # Cuadricula (tienen que dibujarse por mitades para evitar que se desfacen al no coincidir con el centro debido a su distancia de separación)
+        # lado derecho
         for x in range(0, res[0], self.distanciaCuadriculas[0]):
-            Linea("Y"+str(x), (res[0]/2+x, 0), (res[0]/2+x, res[1]), 1, self.colorCuadricula)
-        #lado izquierdo
+            pygame.draw.line(Pantalla().ventana, self.colorCuadricula, (res[0]/2+x, 0), (res[0]/2+x, res[1]), 1)
+        # lado izquierdo
         for x in range(0, -res[0], -self.distanciaCuadriculas[0]):
-            Linea("Y"+str(x), (res[0]/2+x, 0), (res[0]/2+x, res[1]), 1, self.colorCuadricula)
-
-        #lineas horizontales
+            pygame.draw.line(Pantalla().ventana, self.colorCuadricula, (res[0]/2+x, 0), (res[0]/2+x, res[1]), 1)
+        # lineas horizontales
         for y in range(0, res[1], self.distanciaCuadriculas[1]):
-            Linea("X"+str(x), (0, res[1]/2+y), (res[0], res[1]/2+y), 1, self.colorCuadricula)
+            pygame.draw.line(Pantalla().ventana, self.colorCuadricula, (0, res[1]/2+y), (res[0], res[1]/2+y), 1)
         for y in range(0, -res[1], -self.distanciaCuadriculas[1]):
-            Linea("X"+str(x), (0, res[1]/2+y), (res[0], res[1]/2+y), 1, self.colorCuadricula)
+            pygame.draw.line(Pantalla().ventana, self.colorCuadricula, (0, res[1]/2+y), (res[0], res[1]/2+y), 1)
 
-        #Eje X y eje Y
-        self.ejeX = Linea("X", (0, res[1]/2), (res[0], res[1]/2), 5, (255, 0, 0))
-        self.ejeY = Linea("Y", (res[0]/2, 0), (res[0]/2, res[1]), 5, (0, 0, 0))
+        #Eje x
+        pygame.draw.line(Pantalla().ventana, (255, 0, 0), (0, res[1]/2), (res[0], res[1]/2), 5)
+
+        #Eje y
+        pygame.draw.line(Pantalla().ventana, (0, 0, 0), (res[0]/2, 0), (res[0]/2, res[1]), 5)
 
 
-        self.graficarEcuacion(self.ecuacion)
+        # xLetra = Texto("Txt1", (res[0]-20, res[1]/2+res[1]/64), "X", (255, 0, 0))
+        # yLetra = Texto("Txt2", (res[0]/2+10, 0), "Y", (0, 0, 0))
 
+        # Graficar funciones
         #self.graficarFuncion(self.funcionA, (255, 0, 0), True, False, 3)
 
-        xLetra = Texto("Txt1", (res[0]-20, res[1]/2+res[1]/64), "X", (255, 0, 0))
-        yLetra = Texto("Txt2", (res[0]/2+10, 0), "Y", (0, 0, 0))
+        self.graficarOrbita(39.5, 1/52, (1, 0), (0, 2*math.pi), 52)
 
-    def f(self, x, y):
-        return x - 5*x/np.sqrt(x**2 + y**2)
 
+
+        
+
+    def graficarOrbita(self, gm, dt, posInit, velInit, semanas):
+        
+        x = posInit[0]
+        y = posInit[1]
+
+        vx = velInit[0]
+        vy = velInit[1]
+
+
+        coords = self.coordenadasAPixeles(x,y)
+        if (coords[0] > 0 and coords[1]>0):
+                pygame.draw.circle(Pantalla().ventana, (0,0,255), coords, 3)
+
+        for t in range(0, semanas):
+            qx = -1*gm*x/math.pow(x**2+y**2, 1.5)
+            qy = -1*gm*y/math.pow(x**2+y**2, 1.5)
+
+            vx = vx+qx*dt
+            vy = vy+qy*dt
+
+            x = x+vx*dt
+            y = y+vy*dt
+
+            coords = self.coordenadasAPixeles(x,y)
+            if (coords[0] > 0 and coords[1]>0):
+                pygame.draw.circle(Pantalla().ventana, (0,0,255), coords, 3)
+
+                
     def graficarEcuacion(self, ecuacion, color = (0, 0, 255), dibujarLineas = False, dibujarPuntos = True, grosorDeLineas = 4):
         # Generar un rango de valores para x y y
         x = np.linspace(-25, 25, 1000)
@@ -77,12 +121,9 @@ class Plano(Dibujo):
 
         # Imprimir las soluciones
         for x, y in zip(sol_x, sol_y):
-            print(f"La solución es x={x:.2f}, y={y:.2f}")
-            Circulo("C", self.coordenadasAPixeles(x, y), 2, (0,0,0))
-        
+            Circulo("C", self.coordenadasAPixeles(x, y), 2, color)
 
     def ecuacion(self, x):
-       
         return x
 
 
@@ -103,9 +144,10 @@ class Plano(Dibujo):
                         Linea("LPunto", puntoAnterior, pos, grosorDeLineas, color)
                     puntoAnterior = pos
                 if (dibujarPuntos):
-                    Circulo("Punto"+str(x), pos, 5, color)
+                    Circulo("Punto"+str(x), pos, 3, color)
             except:
                 pass
+
 
         puntoAnterior = None
         #lado izquierdo
@@ -120,7 +162,7 @@ class Plano(Dibujo):
                         Linea("Punto", puntoAnterior, pos, grosorDeLineas, color)
                     puntoAnterior = pos
                 if (dibujarPuntos):
-                    Circulo("Punto"+str(x), pos, 5, color)
+                    Circulo("Punto"+str(x), pos, 3, color)
             except:
                 pass
 
@@ -139,5 +181,5 @@ class Plano(Dibujo):
         return (xPix, yPix)
 
     def tick(self, deltaTime):
-        pass
+        self.dibujar()
 
