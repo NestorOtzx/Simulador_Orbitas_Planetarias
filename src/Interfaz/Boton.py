@@ -8,11 +8,13 @@ class Boton(ElementoGUI):
 
     funcionAlPresionar = None
 
-    def __init__(self, nombre, color = (0, 0, 0), funcionAlPresionar = None, pos = (0, 0), tam = (1, 1), texto = ""):
+    def __init__(self, nombre, color = (0, 0, 0), funcionAlPresionar = None, pos = (0, 0), tam = (1, 1), texto = "", colorBorde = (0,0,0)):
         super().__init__(nombre)
         self.color = color
+        self.colorBorde = colorBorde
         self.boton = pygame.Rect(pos[0], pos[1], tam[0], tam[1])
         self.funcionAlPresionar = funcionAlPresionar
+
 
 
         if len(texto) > 0:
@@ -27,7 +29,7 @@ class Boton(ElementoGUI):
         pygame.draw.rect(Pantalla().ventana, self.color, self.boton)
 
         # borde
-        pygame.draw.rect(Pantalla().ventana, (0,0,0), self.boton, 2)
+        pygame.draw.rect(Pantalla().ventana, self.colorBorde, self.boton, 2)
 
         Pantalla().ventana.blit(self.textRender, self.text_rect)
 

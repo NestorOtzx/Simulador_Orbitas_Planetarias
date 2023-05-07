@@ -28,3 +28,7 @@ class Objeto():
         self.posicionX += posicion[0]
         self.posicionY += posicion[1]
 
+    def destroy(self):
+        self.__instancias.remove(self)
+        del self
+

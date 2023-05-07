@@ -17,9 +17,28 @@ class Plano(Dibujo):
 
     MAXDISTCUADRICULAS = (400, 400)
 
+    planetasVisibles = []
+
+    datosPersonalizado = {}
+
+    GM = 39.5
+
 
     def __init__(self, nombre):
         super().__init__(nombre)
+
+        for x in range(0, 9): #Ningun planeta es visible al inicio
+            self.planetasVisibles.append(False)
+
+        self.datosPersonalizado["dt"] = 52
+        self.datosPersonalizado["posx"] = 1
+        self.datosPersonalizado["posy"] = 0
+        self.datosPersonalizado["velx"] = 0
+        self.datosPersonalizado["vely"] = 2*math.pi
+        self.datosPersonalizado["puntos"] = 52
+
+    def v(self, x, y):
+        v = math.sqrt(self.GM * (2 / (x**2+y**2)**2 - 1 / (52**2*self.GM/4*math.pi**2)))
 
     def zoom(self, val):
         self.setDistanciaCuadriculas(val, val)
@@ -60,15 +79,50 @@ class Plano(Dibujo):
 
         self.GraficarFunciones()
 
+    
 
     def GraficarFunciones(self):
-        self.graficarOrbita(39.5, 1/52, (1, 0), (0, 2*math.pi), 100, (0, 255, 0))
-        self.graficarOrbita(39.5, 1/52, (1, 0), (0, 2.1*math.pi), 200, (100, 100, 100))
-        self.graficarOrbita(39.5, 1/520, (1, 0), (0, math.pi), 200, (0, 100, 100))
+        #Mercurio
+        if self.planetasVisibles[0]:
+            self.graficarOrbita(1/52, (0.39, 0), (2.5, 10), 50, (174, 123, 58))
+
+        #Venus
+        if self.planetasVisibles[1]:
+            self.graficarOrbita(1/52, (0.72, 0), (0.6, 7.2), 50, (255, 196, 0))
+
+        #Tierra
+        if self.planetasVisibles[2]:
+            self.graficarOrbita(1/52, (1, 0), (0, 2*math.pi), 52, (129, 248, 255)) #v: 6.28
+
+        #Marte
+        if self.planetasVisibles[3]:
+            self.graficarOrbita(1/52, (1.52, 0), (0, 5.1051), 200, (206, 53, 42))
+
+        #Jupiter
+        if self.planetasVisibles[4]:
+            self.graficarOrbita(1/52, (5.20, 0), (0, 2.7489), 700, (238, 205, 173))
+
+        #Saturno
+        if self.planetasVisibles[5]:
+            self.graficarOrbita(1/52, (9.58, 0), (0, 2.03), 1750, (255, 213, 114))
+
+        #Urano
+        if self.planetasVisibles[6]:
+            self.graficarOrbita(1/52, (19.18, 0), (0, 1.435), 4500, (114, 180, 255))
+
+        #Neptuno
+        if self.planetasVisibles[7]:
+            self.graficarOrbita(1/52, (30.07, 0), (0, 1.15), 9000, (47, 71, 228))
+
+        if self.planetasVisibles[8]:
+            self.graficarOrbita(1/self.datosPersonalizado["dt"], (self.datosPersonalizado["posx"], self.datosPersonalizado["posy"])
+                                , (self.datosPersonalizado["velx"], self.datosPersonalizado["vely"]), self.datosPersonalizado["puntos"], (31, 216, 81))
 
 
 
-    def graficarOrbita(self, gm, dt, posInit, velInit, semanas, color = (0, 0, 255)):
+
+
+    def graficarOrbita(self, dt, posInit, velInit, semanas, color = (0, 0, 255)):
         x = posInit[0]
         y = posInit[1]
 
@@ -81,8 +135,8 @@ class Plano(Dibujo):
                 pygame.draw.circle(Pantalla().ventana, color, coords, 3)
 
         for t in range(0, semanas):
-            qx = -1*gm*x/math.pow(x**2+y**2, 1.5)
-            qy = -1*gm*y/math.pow(x**2+y**2, 1.5)
+            qx = -1*(self.GM)*x/math.pow(x**2+y**2, 1.5)
+            qy = -1*(self.GM)*y/math.pow(x**2+y**2, 1.5)
 
             vx = vx+qx*dt
             vy = vy+qy*dt
@@ -164,6 +218,14 @@ class Plano(Dibujo):
                     #Circulo("Punto"+str(x), pos, 3, color)
             except:
                 pass
+
+
+    def togglePlaneta(self, id):
+        if self.planetasVisibles[id]:
+            self.planetasVisibles[id] = False
+        else:
+            self.planetasVisibles[id] = True
+
 
     def pixelesACoordenadas(self, xPix, yPix):
         res = Pantalla().resolucion

@@ -21,3 +21,7 @@ class ElementoGUI():
 
     def tick(self, deltaTime, eventos):
         pass
+
+    def destroy(self):
+        self.__instancias.remove(self)
+        del self
