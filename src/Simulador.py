@@ -2,15 +2,13 @@ import pygame
 from Pantalla import Pantalla
 
 from Objeto import Objeto
-from Interfaz.Plano import Plano
+from Interfaz.ElementoGUI import ElementoGUI
+
+from Graficos.Plano import Plano
+from Interfaz.Interfaz import Interfaz
 
 from typing import Tuple
 class Simulacion:
-
-    #objeto global
-    objeto = None    
-
-    plano = None
 
     def __init__(self):
         self.valor = 0
@@ -18,13 +16,20 @@ class Simulacion:
     #metodo llamado solamente al inicio de la simulacion
     def inicio(self):
         self.objeto = Objeto("Main")
+        self.UI = ElementoGUI("UI")
+
         self.plano = Plano("Plano cartesiano")
+        self.interfaz = Interfaz(self.plano)
 
 
     #metodo llamado en cada fotograma, donde deltatime es el tiempo transcurrido desde el fotograma anterior
     def tick(self, deltaTime):
         #Actualizar todos los objetos
         self.objeto.tick_global(deltaTime)
+
+    def tickInterfaz(self, deltaTime, eventos):
+        self.UI.tick_global(deltaTime, eventos)
+
 
     def iniciarSimulacion(self):
 
@@ -53,11 +58,13 @@ class Simulacion:
 
             # Read
             
-
             # Update
             self.tick(deltaTime)
 
-            for evento in pygame.event.get():
+            eventos = pygame.event.get()
+            self.tickInterfaz(deltaTime, eventos)
+
+            for evento in eventos:
                 if (evento.type == pygame.QUIT):
                     pygame.quit()
 

@@ -1,15 +1,12 @@
 from Graficos.Dibujo import Dibujo
-from Graficos.Linea import Linea
 from Pantalla import Pantalla
-from Graficos.Circulo import Circulo
-from Graficos.Texto import Texto
+from Interfaz.Boton import Boton
+
 import math
 import numpy as np
 import pygame
-import time
 
 class Plano(Dibujo):
-
 
     #cada cuanto apareceran los puntos, por defecto 1 por cada unidad
     puntosPorUnidad = 8
@@ -21,26 +18,19 @@ class Plano(Dibujo):
     MAXDISTCUADRICULAS = (400, 400)
 
 
-    lineas = []
-
     def __init__(self, nombre):
         super().__init__(nombre)
 
-        
     def zoom(self, val):
         self.setDistanciaCuadriculas(val, val)
-
 
     def setDistanciaCuadriculas(self, x,y):
         currDist =self.distanciaCuadriculas
         if (currDist[0]+x) < self.MAXDISTCUADRICULAS[0] and currDist[0]+x > 0 and currDist[1]+y < self.MAXDISTCUADRICULAS[1] and currDist[1]+y > 0:
             self.distanciaCuadriculas = (self.distanciaCuadriculas[0]+x, self.distanciaCuadriculas[1]+y)
 
-        
-
-    def dibujar(self): #Este metodo solo se llama al inicio
+    def dibujar(self): #Dibujar el plano
         res = Pantalla().resolucion
-
         # Cuadricula (tienen que dibujarse por mitades para evitar que se desfacen al no coincidir con el centro debido a su distancia de separación)
         # lado derecho
         for x in range(0, res[0], self.distanciaCuadriculas[0]):
@@ -60,21 +50,25 @@ class Plano(Dibujo):
         #Eje y
         pygame.draw.line(Pantalla().ventana, (0, 0, 0), (res[0]/2, 0), (res[0]/2, res[1]), 5)
 
+        font = pygame.font.Font(None, 36)
 
-        # xLetra = Texto("Txt1", (res[0]-20, res[1]/2+res[1]/64), "X", (255, 0, 0))
-        # yLetra = Texto("Txt2", (res[0]/2+10, 0), "Y", (0, 0, 0))
+        textoX = font.render("X", True, (255, 0, 0))
+        Pantalla().ventana.blit(textoX, (res[0]-20, res[1]/2+res[1]/64))
 
-        # Graficar funciones
-        #self.graficarFuncion(self.funcionA, (255, 0, 0), True, False, 3)
+        textoY = font.render("Y", True, (0, 0, 0))
+        Pantalla().ventana.blit(textoY, (res[0]/2+10, 0))
 
-        self.graficarOrbita(39.5, 1/52, (1, 0), (0, 2*math.pi), 52)
+        self.GraficarFunciones()
+
+
+    def GraficarFunciones(self):
+        self.graficarOrbita(39.5, 1/52, (1, 0), (0, 2*math.pi), 100, (0, 255, 0))
+        self.graficarOrbita(39.5, 1/52, (1, 0), (0, 2.1*math.pi), 200, (100, 100, 100))
+        self.graficarOrbita(39.5, 1/520, (1, 0), (0, math.pi), 200, (0, 100, 100))
 
 
 
-        
-
-    def graficarOrbita(self, gm, dt, posInit, velInit, semanas):
-        
+    def graficarOrbita(self, gm, dt, posInit, velInit, semanas, color = (0, 0, 255)):
         x = posInit[0]
         y = posInit[1]
 
@@ -84,7 +78,7 @@ class Plano(Dibujo):
 
         coords = self.coordenadasAPixeles(x,y)
         if (coords[0] > 0 and coords[1]>0):
-                pygame.draw.circle(Pantalla().ventana, (0,0,255), coords, 3)
+                pygame.draw.circle(Pantalla().ventana, color, coords, 3)
 
         for t in range(0, semanas):
             qx = -1*gm*x/math.pow(x**2+y**2, 1.5)
@@ -98,7 +92,7 @@ class Plano(Dibujo):
 
             coords = self.coordenadasAPixeles(x,y)
             if (coords[0] > 0 and coords[1]>0):
-                pygame.draw.circle(Pantalla().ventana, (0,0,255), coords, 3)
+                pygame.draw.circle(Pantalla().ventana, color, coords, 3)
 
                 
     def graficarEcuacion(self, ecuacion, color = (0, 0, 255), dibujarLineas = False, dibujarPuntos = True, grosorDeLineas = 4):
@@ -121,7 +115,8 @@ class Plano(Dibujo):
 
         # Imprimir las soluciones
         for x, y in zip(sol_x, sol_y):
-            Circulo("C", self.coordenadasAPixeles(x, y), 2, color)
+            #Circulo("C", self.coordenadasAPixeles(x, y), 2, color)
+            pass
 
     def ecuacion(self, x):
         return x
@@ -141,10 +136,12 @@ class Plano(Dibujo):
 
                 if (dibujarLineas):
                     if not puntoAnterior is None:
-                        Linea("LPunto", puntoAnterior, pos, grosorDeLineas, color)
+                        #Linea("LPunto", puntoAnterior, pos, grosorDeLineas, color)
+                        pass
                     puntoAnterior = pos
                 if (dibujarPuntos):
-                    Circulo("Punto"+str(x), pos, 3, color)
+                    # Circulo("Punto"+str(x), pos, 3, color)
+                    pass
             except:
                 pass
 
@@ -159,10 +156,12 @@ class Plano(Dibujo):
 
                 if (dibujarLineas):
                     if not puntoAnterior is None:
-                        Linea("Punto", puntoAnterior, pos, grosorDeLineas, color)
+                        #Linea("Punto", puntoAnterior, pos, grosorDeLineas, color)
+                        pass
                     puntoAnterior = pos
                 if (dibujarPuntos):
-                    Circulo("Punto"+str(x), pos, 3, color)
+                    pass
+                    #Circulo("Punto"+str(x), pos, 3, color)
             except:
                 pass
 
