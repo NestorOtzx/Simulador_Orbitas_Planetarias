@@ -14,14 +14,14 @@ Y aquí se muestra el programa con todos los planetas del sistema solar:
 
 ![Planetas2](Imagenes/Readme/planetas2.jpg)
 
-Finalmente aquí tenemos las órbitas de un planeta personalizado el cual deja un rastro bastante espectacular:
+Finalmente, aquí tenemos las órbitas de un planeta personalizado, el cual deja un rastro bastante espectacular:
 
 ![PlanetaPers](Imagenes/Readme/planeta.jpg)
 
 
 ## Dependencias
 
-El proyecto usa un par de librerías para su funcionamiento, cada una de ellas será explicada a continuación.
+El proyecto usa un par de librerías para su funcionamiento, cada una de ellas será explicada más adelante.
 
 En el archivo requirements.txt están contenidas todas las dependencias de este proyecto, junto con la versión que fue utilizada.
 
