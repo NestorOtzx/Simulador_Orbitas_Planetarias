@@ -12,7 +12,6 @@ class Interfaz:
 
     elementosPersonalizado = []
 
-    textoDt = None
     textoPosx = None
     textoPosy = None
     textoVelx = None
@@ -24,7 +23,7 @@ class Interfaz:
         res = Pantalla().resolucion
 
 
-        Boton("b1", self.colorBotones, self.mercurio, (0,0), (200, 50), "Mercurio", self.colorBorde)
+        Boton("b1", self.colorBotones, self.mercurio, (0,0), (res[0]/6, res[1]/18), "Mercurio", self.colorBorde)
         Boton("b2", self.colorBotones, self.venus, (0, 1*res[1]/16), (res[0]/6, res[1]/18), "Venus", self.colorBorde)
         Boton("b3", self.colorBotones, self.tierra, (0,2*res[1]/16), (res[0]/6, res[1]/18), "Tierra", self.colorBorde)
         Boton("b4", self.colorBotones, self.marte, (0,3*res[1]/16), (res[0]/6, res[1]/18), "Marte", self.colorBorde)
@@ -44,10 +43,9 @@ class Interfaz:
             self.personalizadoVisible = True
             datos = self.plano.datosPersonalizado
 
-            dtFormat = str(datos["dt"])
-            self.textoDt = Texto("Dt", (res[0]-res[0]/4, 1.25*res[1]/16), "Dt: 1/"+dtFormat, (255, 0, 0))
-            self.elementosPersonalizado.append(Boton("Incdt", self.colorBotones, self.incDt, (res[0]-res[0]/6.5,  2*res[1]/16), (res[1]/18,  res[1]/18), "+", self.colorBorde))
-            self.elementosPersonalizado.append(Boton("Decdt", self.colorBotones, self.decDt, (res[0]-res[0]/4.5,  2*res[1]/16), (res[1]/18,  res[1]/18), "-", self.colorBorde))
+            self.textoPuntos = Texto("puntos", (res[0]-res[0]/3.75, 1.25*res[1]/16), "Puntos a graficar: "+str(datos["puntos"]), (255, 0, 0))
+            self.elementosPersonalizado.append(Boton("IncPts", self.colorBotones, self.incPuntos, (res[0]-res[0]/6.5,  2*res[1]/16), (res[1]/18,  res[1]/18), "+", self.colorBorde))
+            self.elementosPersonalizado.append(Boton("DecPts", self.colorBotones, self.decPuntos, (res[0]-res[0]/4.5,  2*res[1]/16), (res[1]/18,  res[1]/18), "-", self.colorBorde))
 
             posxFormat = "{:.1f}".format(datos["posx"])
             self.textoPosx = Texto("posx", (res[0]-res[0]/4, 3.25*res[1]/16), "Posicion X: "+posxFormat+" UA", (255, 0, 0))
@@ -69,14 +67,11 @@ class Interfaz:
             self.elementosPersonalizado.append(Boton("IncMasa", self.colorBotones, self.incVely, (res[0]-res[0]/6.5,  10*res[1]/16), (res[1]/18,  res[1]/18), "+", self.colorBorde))
             self.elementosPersonalizado.append(Boton("DecMasa", self.colorBotones, self.decVely, (res[0]-res[0]/4.5,  10*res[1]/16), (res[1]/18,  res[1]/18), "-", self.colorBorde))
 
-            self.textoPuntos = Texto("puntos", (res[0]-res[0]/4, 11.25*res[1]/16), "Puntos a graficar: "+str(datos["puntos"]), (255, 0, 0))
-            self.elementosPersonalizado.append(Boton("IncPts", self.colorBotones, self.incPuntos, (res[0]-res[0]/6.5,  12*res[1]/16), (res[1]/18,  res[1]/18), "+", self.colorBorde))
-            self.elementosPersonalizado.append(Boton("DecPts", self.colorBotones, self.decPuntos, (res[0]-res[0]/4.5,  12*res[1]/16), (res[1]/18,  res[1]/18), "-", self.colorBorde))
+            
 
         else:
             for objeto in self.elementosPersonalizado:
                 objeto.destroy()
-            self.textoDt.destroy()
             self.textoPosx.destroy()
             self.textoPosy.destroy()
             self.textoVelx.destroy()
@@ -86,17 +81,11 @@ class Interfaz:
             self.elementosPersonalizado = []
             self.personalizadoVisible = False
 
-    def incDt(self):
-        self.modificarAtributo("dt", "Dt: 1/", 10, self.textoDt,  puedeserNegativo=False, format=False)
-
-    def decDt(self):
-        self.modificarAtributo("dt", "Dt: 1/", -10,  self.textoDt,  puedeserNegativo=False, format=False)
-
     def incPosx(self):
-        self.modificarAtributo("posx", "Posicion X: ", 0.2, self.textoPosx, " UA", decimales=1)
+        self.modificarAtributo("posx", "Posicion X: ", 0.1, self.textoPosx, " UA", decimales=1)
 
     def decPosx(self):
-        self.modificarAtributo("posx", "Posicion X: ", -0.2, self.textoPosx, " UA",  decimales=1)
+        self.modificarAtributo("posx", "Posicion X: ", -0.1, self.textoPosx, " UA",  decimales=1)
 
     def incPosy(self):
         self.modificarAtributo("posy", "Posicion Y: ", 0.1, self.textoPosy, " UA",  decimales=1)
@@ -105,22 +94,22 @@ class Interfaz:
         self.modificarAtributo("posy", "Posicion Y: ", -0.1, self.textoPosy, " UA",  decimales=1)
 
     def incVelx(self):
-        self.modificarAtributo("velx", "Velocidad X: ", math.pi/32, self.textoVelx, " UA/año")
+        self.modificarAtributo("velx", "Velocidad X: ", math.pi/8, self.textoVelx, " UA/año")
 
     def decVelx(self):
-        self.modificarAtributo("velx", "Velocidad X: ", -math.pi/32, self.textoVelx, " UA/año")
+        self.modificarAtributo("velx", "Velocidad X: ", -math.pi/8, self.textoVelx, " UA/año")
 
     def incVely(self):
-        self.modificarAtributo("vely", "Velocidad Y: ", 0.1, self.textoVely, " UA/año")
+        self.modificarAtributo("vely", "Velocidad Y: ", math.pi/8, self.textoVely, " UA/año")
 
     def decVely(self):
-        self.modificarAtributo("vely", "Velocidad Y: ", -0.1, self.textoVely, " UA/año")
+        self.modificarAtributo("vely", "Velocidad Y: ", -math.pi/8, self.textoVely, " UA/año")
 
     def incPuntos(self):
-        self.modificarAtributo("puntos", "Puntos a graficar: ", 10, self.textoPuntos, format = False, puedeserNegativo=False)
+        self.modificarAtributo("puntos", "Puntos a graficar: ", 20, self.textoPuntos, format = False, puedeserNegativo=False)
 
     def decPuntos(self):
-        self.modificarAtributo("puntos", "Puntos a graficar: ", -10, self.textoPuntos, format = False, puedeserNegativo=False)
+        self.modificarAtributo("puntos", "Puntos a graficar: ", -20, self.textoPuntos, format = False, puedeserNegativo=False)
 
 
     def modificarAtributo(self, keyAtributo, textoAtributo, valor, contenedorTexto, textoFinal="", format = True, puedeserNegativo = True, decimales = 4):
@@ -145,6 +134,7 @@ class Interfaz:
 
 
     def mercurio(self):
+        
         self.plano.togglePlaneta(0)
 
     def venus(self):
