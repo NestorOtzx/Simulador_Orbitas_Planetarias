@@ -1,4 +1,15 @@
-# SimuladorDeFisica
+# Simulador de Física
+
+## Descripción
+
+Este programa tiene la capacidad de gráficar las ortbitas de los 8 planetas del sistema solar, a demás de un planeta personalizado por el usuario.
+
+## Gráfica de orbitas planetarias
+
+![Planetas1](Imagenes/Readme/planeta.jpg)
+![Planetas2](Imagenes/Readme/planetas1.jpg)
+![Planetas3](Imagenes/Readme/planetas2.jpg)
+![Planetas4](Imagenes/Readme/planetas3.jpg)
 
 ## Dependencias
 

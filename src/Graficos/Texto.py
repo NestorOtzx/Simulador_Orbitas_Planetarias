@@ -9,7 +9,8 @@ class Texto(Dibujo):
         super().__init__(nombre, color)
         self.posicion = posicion
         self.font = pygame.font.Font(None, size*int(Pantalla().resolucion[1]/30))
-        # crea una superficie de texto
+
+        # Crea una superficie de texto
         color = self.color = color
         self.texto = self.font.render(texto, True, self.color)
 

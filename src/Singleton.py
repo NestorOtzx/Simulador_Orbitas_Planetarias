@@ -1,4 +1,5 @@
 
+# Clase para crear subclases con el patrón singleton
 class Singleton(type):
     _instances = {}
 

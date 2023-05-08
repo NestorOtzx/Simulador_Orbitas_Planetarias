@@ -22,23 +22,24 @@ class Interfaz:
         self.plano = plano
         res = Pantalla().resolucion
 
-
-        Boton("b1", self.colorBotones, self.mercurio, (0,0), (res[0]/6, res[1]/18), "Mercurio", self.colorBorde)
-        Boton("b2", self.colorBotones, self.venus, (0, 1*res[1]/16), (res[0]/6, res[1]/18), "Venus", self.colorBorde)
-        Boton("b3", self.colorBotones, self.tierra, (0,2*res[1]/16), (res[0]/6, res[1]/18), "Tierra", self.colorBorde)
-        Boton("b4", self.colorBotones, self.marte, (0,3*res[1]/16), (res[0]/6, res[1]/18), "Marte", self.colorBorde)
-        Boton("b5", self.colorBotones, self.jupiter, (0,4*res[1]/16), (res[0]/6, res[1]/18), "Jupiter", self.colorBorde)
-        Boton("b6", self.colorBotones, self.saturno, (0,5*res[1]/16), (res[0]/6, res[1]/18), "Saturno", self.colorBorde)
-        Boton("b7", self.colorBotones, self.urano, (0,6*res[1]/16), (res[0]/6, res[1]/18), "Urano", self.colorBorde)
-        Boton("b8", self.colorBotones, self.neptuno, (0,7*res[1]/16), (res[0]/6, res[1]/18), "Neptuno", self.colorBorde)
+        # Botones de cada planeta
+        Boton("b1", self.colorBotones, self.mercurio, (0,0), (res[0]/6, res[1]/18), "Mercurio", self.colorBorde, permanecePresionado=True)
+        Boton("b2", self.colorBotones, self.venus, (0, 1*res[1]/16), (res[0]/6, res[1]/18), "Venus", self.colorBorde, permanecePresionado=True)
+        Boton("b3", self.colorBotones, self.tierra, (0,2*res[1]/16), (res[0]/6, res[1]/18), "Tierra", self.colorBorde, permanecePresionado=True)
+        Boton("b4", self.colorBotones, self.marte, (0,3*res[1]/16), (res[0]/6, res[1]/18), "Marte", self.colorBorde, permanecePresionado=True)
+        Boton("b5", self.colorBotones, self.jupiter, (0,4*res[1]/16), (res[0]/6, res[1]/18), "Jupiter", self.colorBorde, permanecePresionado=True)
+        Boton("b6", self.colorBotones, self.saturno, (0,5*res[1]/16), (res[0]/6, res[1]/18), "Saturno", self.colorBorde, permanecePresionado=True)
+        Boton("b7", self.colorBotones, self.urano, (0,6*res[1]/16), (res[0]/6, res[1]/18), "Urano", self.colorBorde, permanecePresionado=True)
+        Boton("b8", self.colorBotones, self.neptuno, (0,7*res[1]/16), (res[0]/6, res[1]/18), "Neptuno", self.colorBorde, permanecePresionado=True)
         
-        Boton("personalizado", self.colorBotones, self.planetaPersonalizado, (res[0]-res[0]/6, 0), (res[0]/6, res[1]/18), "Personalizado", self.colorBorde)
+        # Boton personalizado
+        Boton("personalizado", self.colorBotones, self.planetaPersonalizado, (res[0]-res[0]/6, 0), (res[0]/6, res[1]/18), "Personalizado", self.colorBorde, permanecePresionado=True)
 
+    # Menú del planeta personalizado
     def planetaPersonalizado(self):
-        #Activar el planeta personalizado
         self.personalizado()
 
-        if not self.personalizadoVisible:
+        if not self.personalizadoVisible: # Mostrar el menú del planeta personalizado
             res = Pantalla().resolucion
             self.personalizadoVisible = True
             datos = self.plano.datosPersonalizado
@@ -69,7 +70,7 @@ class Interfaz:
 
             
 
-        else:
+        else: # Cerrar el menú del planeta personalizado
             for objeto in self.elementosPersonalizado:
                 objeto.destroy()
             self.textoPosx.destroy()
@@ -111,7 +112,7 @@ class Interfaz:
     def decPuntos(self):
         self.modificarAtributo("puntos", "Puntos a graficar: ", -20, self.textoPuntos, format = False, puedeserNegativo=False)
 
-
+    # Modificar características del planeta personalizado
     def modificarAtributo(self, keyAtributo, textoAtributo, valor, contenedorTexto, textoFinal="", format = True, puedeserNegativo = True, decimales = 4):
         if puedeserNegativo or not puedeserNegativo and self.plano.datosPersonalizado[keyAtributo] + valor >= 0:
             self.plano.datosPersonalizado[keyAtributo] += valor
@@ -128,13 +129,7 @@ class Interfaz:
         print(textoFinal)
         contenedorTexto.modificarTexto(textoAtributo + textoValor + textoFinal)
 
-
-
-
-
-
     def mercurio(self):
-        
         self.plano.togglePlaneta(0)
 
     def venus(self):

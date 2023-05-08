@@ -8,9 +8,10 @@ class Boton(ElementoGUI):
     colorActual = defColor
 
     funcionAlPresionar = None
+    permanecePresionado = False
     presionado = False
 
-    def __init__(self, nombre, color = (255, 255, 255), funcionAlPresionar = None, pos = (0, 0), tam = (1, 1), texto = "", colorBorde = (0,0,0), colorPresionado = (200, 200, 200)):
+    def __init__(self, nombre, color = (255, 255, 255), funcionAlPresionar = None, pos = (0, 0), tam = (1, 1), texto = "", colorBorde = (0,0,0), permanecePresionado = False, colorPresionado = (200, 200, 200)):
         super().__init__(nombre)
         self.defColor = color
         self.colorBorde = colorBorde
@@ -18,7 +19,9 @@ class Boton(ElementoGUI):
         self.funcionAlPresionar = funcionAlPresionar
         self.colorActual = self.defColor
         self.colorPresionado = colorPresionado
+        self.permanecePresionado = permanecePresionado
 
+        # Si el botón contiene texto
         if len(texto) > 0:
             self.texto = texto
             self.font = pygame.font.SysFont(None, 30)
@@ -39,7 +42,8 @@ class Boton(ElementoGUI):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.boton.collidepoint(event.pos):
                     self.funcionAlPresionar()
-                    self.setPresionado()
+                    if self.permanecePresionado:
+                        self.setPresionado()
 
     def setPresionado(self):
         if not self.presionado:

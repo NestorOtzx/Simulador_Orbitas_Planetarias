@@ -118,18 +118,35 @@ class Plano(Dibujo):
 
 
     def graficarOrbita(self, dt, posInit, velInit, semanas, color = (0, 0, 255)):
+
+        # Valores Iniciales
         x = posInit[0]
         y = posInit[1]
 
         vx = velInit[0]
         vy = velInit[1]
 
+        # --Dibujar punto inicial--
 
+        # Aceleracion
+        qx = -1*(self.GM)*x/math.pow(x**2+y**2, 1.5)
+        qy = -1*(self.GM)*y/math.pow(x**2+y**2, 1.5)
+
+        # Velocidad
+        vx = vx+qx*dt/2
+        vy = vy+qy*dt/2
+
+        # Posicion
+        x = x+vx*dt
+        y = y+vy*dt
+
+        # Dibujar punto en x, y
         coords = self.coordenadasAPixeles(x,y)
         if (coords[0] > 0 and coords[1]>0):
                 pygame.draw.circle(Pantalla().ventana, color, coords, 3)
 
-        for t in range(0, semanas):
+        # Dibujar el resto de puntos
+        for t in range(1, semanas):
             qx = -1*(self.GM)*x/math.pow(x**2+y**2, 1.5)
             qy = -1*(self.GM)*y/math.pow(x**2+y**2, 1.5)
 
@@ -139,6 +156,7 @@ class Plano(Dibujo):
             x = x+vx*dt
             y = y+vy*dt
 
+            # Dibujar punto en x, y
             coords = self.coordenadasAPixeles(x,y)
             if (coords[0] > 0 and coords[1]>0):
                 pygame.draw.circle(Pantalla().ventana, color, coords, 3)

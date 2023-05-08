@@ -1,4 +1,5 @@
 
+# Clase base para todos los objetos del entorno de la simulación
 class Objeto():
 
     #todos los objetos en la simulacion
@@ -14,7 +15,7 @@ class Objeto():
         self.__instancias.append(self)
         self.nombre = nombre
 
-    #este metodo actualizara a todos los objetos por el metodo tick.
+    # Este metodo actualizará todos los objetos existentes con el metodo tick.
     @classmethod
     def tick_global(cls, deltaTime):
         for instancia in cls.__instancias:
@@ -23,10 +24,6 @@ class Objeto():
 
     def tick(self, deltaTime):
         pass
-
-    def mover(self, posicion):
-        self.posicionX += posicion[0]
-        self.posicionY += posicion[1]
 
     def destroy(self):
         self.__instancias.remove(self)

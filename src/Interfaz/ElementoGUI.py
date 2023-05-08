@@ -13,6 +13,7 @@ class ElementoGUI():
         self.__instancias.append(self)
         self.nombre = nombre
 
+    # Este metodo actualizará todos los elementos de la interfaz existentes con el metodo tick.
     @classmethod
     def tick_global(cls, deltaTime, eventos):
         for instancia in cls.__instancias:
