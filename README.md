@@ -1,4 +1,4 @@
-# Simulador de Física
+# Simulador de órbitas
 
 ## Descripción
 
